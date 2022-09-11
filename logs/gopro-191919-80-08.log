@@ -1,0 +1,3 @@
+[INFO][server.go:69] 2022/08/19 19:05:45 accept link
+[INFO][server.go:69] 2022/08/19 19:07:25 accept link
+[INFO][echo.go:44] 2022/08/19 19:07:25 create EchoClient
