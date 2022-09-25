@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gopro/config"
 	"gopro/lib/logger"
+	"gopro/resp/handler"
 	"gopro/tcp"
 	"os"
 )
@@ -41,7 +42,8 @@ func main() {
 	err := tcp.ListenAndServeWithSignal(&tcp.Config{
 		Address: fmt.Sprintf("%s:%d", config.Properties.Bind, config.Properties.Port),
 	},
-		tcp.MakeHandler(),
+		//tcp.MakeHandler(),
+		handler.MakeHandler(),
 	)
 	if err != nil {
 		logger.Error(err)

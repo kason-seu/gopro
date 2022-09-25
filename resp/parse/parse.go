@@ -95,9 +95,10 @@ func parse0(reader io.Reader, ch chan<- *Payload) {
 					ch <- &Payload{
 						Data: &reply.EmptyMultiBulkReply{},
 					}
+					state = readState{}
+					continue
 				}
-				state = readState{}
-				continue
+
 			} else if msg[0] == '$' { // $4\r\n
 				err = parseBulkHeader(msg, &state)
 				if err != nil {
@@ -113,10 +114,10 @@ func parse0(reader io.Reader, ch chan<- *Payload) {
 					ch <- &Payload{
 						Data: &reply.NullBulkReply{},
 					}
+					state = readState{}
+					continue
 				}
-				// 重置state
-				state = readState{}
-				continue
+
 			} else if msg[0] == '+' || msg[0] == '-' || msg[0] == ':' {
 				var lineReply resp.Reply
 				lineReply, err = parseSingleLineReply(msg, &state)
@@ -154,7 +155,8 @@ func parse0(reader io.Reader, ch chan<- *Payload) {
 					}
 				case '$':
 					ch <- &Payload{
-						Data: reply.MakeBulkReply(state.args[0]),
+						//Data: reply.MakeBulkReply(state.args[0]),
+						Data: reply.MakeMultiBulkReply([][]byte{state.args[0]}),
 						Err:  err,
 					}
 
